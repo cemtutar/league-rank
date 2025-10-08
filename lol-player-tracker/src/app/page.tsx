@@ -23,7 +23,7 @@ type PlayerSummary = {
 export default function HomePage() {
   const [region, setRegion] = useState('americas');
   const [gameName, setGameName] = useState('');
-  the [tagLine, setTagLine] = useState('');
+  const [tagLine, setTagLine] = useState('');
   const [summary, setSummary] = useState<PlayerSummary | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
