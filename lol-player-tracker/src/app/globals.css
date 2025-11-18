@@ -9,3 +9,26 @@
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+/* Morpheus Den CSS Linear Gradient Background */
+.app-bg {
+  /* fallback color */
+  background: #30cfd0;
+  /* Morpheus Den: left-to-right cyan -> deep purple */
+  background: linear-gradient(to right, #30cfd0, #330867);
+  /* allow a gentle horizontal shift */
+  background-size: 200% 100%;
+  animation: app-bg-shift 12s ease-in-out infinite;
+}
+
+@keyframes app-bg-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

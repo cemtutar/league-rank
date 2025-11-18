@@ -1,0 +1,94 @@
+<main class="page">
+  <section class="panel">
+    <div class="panel-header">
+      <h1>LoL Player Tracker</h1>
+      <p>Search for a Riot ID to view recent ranked performance.</p>
+    </div>
+
+    <form class="search-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="field">
+        <span>Game Name</span>
+        <input type="text" formControlName="gameName" placeholder="Summoner" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Tag Line</span>
+        <input type="text" formControlName="tagLine" placeholder="1234" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Region</span>
+        <select formControlName="region">
+          <option *ngFor="let regionOption of regions" [value]="regionOption">
+            {{ regionOption | titlecase }}
+          </option>
+        </select>
+      </label>
+      <button class="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Searching…' : 'Track Player' }}
+      </button>
+    </form>
+
+    <p class="error" *ngIf="error() as currentError">{{ currentError }}</p>
+  </section>
+
+  <section class="panel" *ngIf="summary() as current">
+    <div class="summary-header">
+      <div>
+        <h2>
+          {{ current.gameName }}<span>#{{ current.tagLine }}</span>
+        </h2>
+        <p>{{ current.region | uppercase }}</p>
+      </div>
+      <div class="badge">{{ current.matches.length }} recent ranked matches</div>
+    </div>
+
+    <ng-container *ngIf="current.matches.length > 0; else emptyState">
+      <ng-container *ngIf="getAggregate(current) as stats">
+        <div class="metrics">
+          <div class="metric">
+            <p class="label">Average KDA</p>
+            <p class="value">{{ stats.kda }}</p>
+            <p class="hint">{{ stats.totalKills }} / {{ stats.totalDeaths }} / {{ stats.totalAssists }} total</p>
+          </div>
+          <div class="metric">
+            <p class="label">Average Duration</p>
+            <p class="value">{{ formatDuration(stats.averageDurationSeconds) }}</p>
+            <p class="hint">Across {{ current.matches.length }} matches</p>
+          </div>
+          <div class="metric">
+            <p class="label">Most Recent Match</p>
+            <p class="value">{{ current.matches[0].playedAt | date: 'medium' }}</p>
+            <p class="hint">ID: {{ current.matches[0].matchId }}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <ul class="match-list">
+        <li *ngFor="let match of current.matches; trackBy: trackMatch">
+          <div class="match-meta">
+            <p class="label">{{ match.playedAt | date: 'medium' }}</p>
+            <p class="hint">{{ getQueueLabel(match.queueId) }}</p>
+          </div>
+          <div class="champion" *ngIf="match.champion as champ">
+            <img *ngIf="champ.image" [src]="champ.image" [alt]="champ.name" />
+            <div>
+              <p>{{ champ.name }}</p>
+              <p class="hint">Champion ID: {{ champ.id }}</p>
+            </div>
+          </div>
+          <div class="kda">
+            <span>{{ match.kills }}</span>
+            <span class="separator">/</span>
+            <span>{{ match.deaths }}</span>
+            <span class="separator">/</span>
+            <span>{{ match.assists }}</span>
+          </div>
+          <div class="duration">{{ formatDuration(match.duration) }}</div>
+        </li>
+      </ul>
+    </ng-container>
+  </section>
+
+  <ng-template #emptyState>
+    <p class="empty-state">No ranked matches recorded yet. Try refreshing once a game is completed.</p>
+  </ng-template>
+</main>
