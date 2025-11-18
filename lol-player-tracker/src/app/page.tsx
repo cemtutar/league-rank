@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api').replace(/\/$/, '');
+
 type PlayerSummary = {
   puuid: string;
   gameName: string;
@@ -57,7 +59,7 @@ export default function HomePage() {
     setSummary(null);
 
     try {
-      const resolveResponse = await fetch('/api/players/resolve', {
+      const resolveResponse = await fetch(`${API_BASE_URL}/players/resolve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameName, tagLine, region })
@@ -68,7 +70,9 @@ export default function HomePage() {
       }
 
       const { puuid } = await resolveResponse.json();
-      const summaryResponse = await fetch(`/api/players/${puuid}/summary?region=${encodeURIComponent(region)}`);
+      const summaryResponse = await fetch(
+        `${API_BASE_URL}/players/${puuid}/summary?region=${encodeURIComponent(region)}`
+      );
 
       if (!summaryResponse.ok) {
         throw new Error('Unable to load summary');

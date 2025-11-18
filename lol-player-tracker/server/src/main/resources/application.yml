@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lol
+    username: lol_user
+    password: lol_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  cache:
+    type: caffeine
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+riot:
+  api-key: ${RIOT_API_KEY:RGAPI-61082bf4-1596-4c83-8b8a-99c71b2937d5}
+
+lol:
+  champion-data-url: ${DDRAGON_CHAMPION_DATA_URL:https://ddragon.leagueoflegends.com/cdn/14.9.1/data/en_US/champion.json}
+
+cors:
+  allow-origin: ${CORS_ALLOW_ORIGIN:http://localhost:3000,http://localhost:4200}

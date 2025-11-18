@@ -32,6 +32,7 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+web/.angular/
 
 # Optional: ignore coverage & build artifacts
 coverage/
