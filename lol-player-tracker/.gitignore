@@ -33,6 +33,8 @@ Thumbs.db
 .vscode/
 *.swp
 web/.angular/
+server/target/
+server/.idea/
 
 # Optional: ignore coverage & build artifacts
 coverage/
